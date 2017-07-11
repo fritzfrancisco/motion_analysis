@@ -19,7 +19,7 @@ dist = []
 crop = []
 ### start and stop time (s)
 start = 0
-stop = 0
+stop = 30
 xyreturn=None
 crp_lst = []
 p1 = (0,0)
@@ -28,6 +28,8 @@ switch = 0
 
 # videofile = 'helder_test.MP4'
 videofile = '/home/cronk/Documents/Projects/Jordan Lab/HIWI/1_2014-09-06_08-29-03.mp4'
+# videofile = '/home/cronk/Documents/Projects/Jordan Lab/HIWI/5_2014-09-28_17-30-03.mp4'
+# videofile = '/home/cronk/Documents/test.mp4'
 cap = cv2.VideoCapture(videofile)
 
 def divide_frame(event,x,y,flags,param):
@@ -49,6 +51,7 @@ while xyreturn == None:
     height, width, channels = frame.shape
 
     cv2.namedWindow("Crop")
+    # cv2.namedWindow("Crop",16 | 0)
     cv2.setMouseCallback("Crop",divide_frame)
     key = cv2.waitKey(30) & 0xFF
 
