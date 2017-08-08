@@ -19,14 +19,14 @@ dist = []
 crop = []
 ### start and stop time (s)
 start = 0
-stop = 30
+stop = 0
 xyreturn=None
 crp_lst = []
 p1 = (0,0)
 p2 = (1,1)
 switch = 0
 
-# videofile = ''
+videofile = ''
 cap = cv2.VideoCapture(videofile)
 
 def divide_frame(event,x,y,flags,param):
@@ -73,14 +73,13 @@ while xyreturn == None:
                 crop.remove(g)
         cv2.destroyAllWindows()
         break
-
     cv2.imshow("Crop",frame)
 
 while(1):
     # file_list = sorted(glob.glob(str(os.path.dirname(videofile) + '/' + '*.{}'.format('mp4'))))
     # print(file_list)
     filename = (os.path.splitext(os.path.basename(videofile))[0])
-    f = h5py.File('test_'+ filename +'.h5' ,'a')
+    f = h5py.File('test_'+ filename +'.h5' ,'w')
     print("File: ",filename)
 
     for i,j in enumerate(crop):
@@ -88,10 +87,12 @@ while(1):
         analyser = an.analyser(videofile,i,j,start,stop,f)
         analyser.start()
 
+    ### plot data from file:
     for i,name in enumerate(f):
-        data.append((range(0,len(analyser.cumsum(f["tank_%s/framenr"%(i+1)].value))),analyser.cumsum(f["tank_%s/framenr"%(i+1)].value)))
+        data.append((range(0,max(f["tank_%s/framenr"%(i+1)].value)),analyser.occurrence(f["tank_%s/frame_occurr"%(i+1)].value)))
+        # print(analyser.occurrence(np.intp(f["tank_%s/frame_occurr"%(i+1)].value)))
     reader = an.reader(f,videofile,start,stop)
-    # reader.plot(data)
+    reader.plot(data)
     # reader.cumulative_plot(data)
     f.close()
     break
